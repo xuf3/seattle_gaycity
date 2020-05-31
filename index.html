@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>LGBTQ community in Seattle</title>
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="main.css">
+    <script src="js/leaflet.js"></script>
+    <script src="seattle.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+      var mymap = L.map('map',{center:[47.6062,-122.3321],zoom: 10});
+      var gray = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png').addTo(mymap);
+    </script>
+  </body>
+</html>
