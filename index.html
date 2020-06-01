@@ -4,20 +4,133 @@
     <meta charset="utf-8">
     <title>LGBTQ community in Seattle</title>
     <link rel="stylesheet" href="css/leaflet.css" />
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
     <script src="js/leaflet.js"></script>
     <script src="seattle.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   </head>
   <body>
+  <div id="info">
+    <div id="title">
+      LGBTQ Community Map (2009)
+    </div>
+
+    <p><span class="placename">source</span></p>
+    <p>Total population:</p>
+    <div class="card-deck counts">
+      <div class="card">
+        <div class="card-body county">
+          <h5 class="card-title">Percent White</h5>
+        </div>
+        <p class="card-text"><span class="county-count">N/A</span></p>
+      </div>
+      <div class="card">
+        <div class="card-body state">
+          <h5 class="card-title">Percent Black</h5>
+          <p class="card-text">
+            <span class="state-count">351</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card-deck counts">
+      <div class="card">
+        <div class="card-body county">
+          <h5 class="card-title">Percent Asian</h5>
+        </div>
+        <p class="card-text"><span class="county-count">N/A</span></p>
+      </div>
+      <div class="card">
+        <div class="card-body state">
+          <h5 class="card-title">Percent Hispanic Latino</h5>
+          <p class="card-text">
+            <span class="state-count">351</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="county-chart"></div>
+
+    <div id="footer">
+      FOOTER HERE
+    </div>
+
+  </div>
     <div id="map"></div>
     <script type="text/javascript">
-      var mymap = L.map('map',{center:[47.6062,-122.3321],zoom: 10});
+      //adding the basemap
+      var mylayer;
+      var mymap = L.map('map',
+      {zoomControl: false,center:[47.6062,-122.3321],zoom: 10});
       L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
         	maxZoom: 20,
         	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
         }).addTo(mymap);
-      var seattleLayer = L.geoJSON(myData, {style:{fillColor:'purple',
-        weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}}).addTo(mymap);
+
+        //set the color for each area
+        function classificationCN(x){
+                    return x > 30? '#bd0026':
+                    x > 15? '#f03b20':
+                    x > 5? '#fd8d3c':
+                    x > 3? '#feb24c':
+                    x > 1? '#fed976': '#ffffb2';}
+
+        //this function works when there's a click on the map
+        //will highlight the layer that the mouse clicked
+        function highlightFeature(e) {
+        // e indicates the current event
+              var layer = e.target; //the target capture the object which the event associates with
+              layer.setStyle({
+                weight: 2,
+                opacity: 0.8,
+                color: '#e3e3e3',
+                fillColor: '#00ffd9',
+                fillOpacity: 0.1
+            });}
+
+        // 3.2.2 zoom to the highlighted feature when the mouse is clicking onto it.
+        function zoomToFeature(e) {
+          // mymap.fitBounds(e.target.getBounds());
+          L.DomEvent.stopPropagation(e);
+          $("#hint").text("Click here to the global trend.");
+          //displayPlace(e.target.feature.properties.enname)
+        }
+
+        // 3.2.3 reset the hightlighted feature when the mouse is out of its region.
+       function resetHighlight(e) {
+         mylayer.resetStyle(e.target);
+      }
+
+      function onEachFeature(feature, layer) {
+      layer.on({
+            mouseover: highlightFeature,
+            click: zoomToFeature,
+            mouseout: resetHighlight
+        });}
+        //add percentChinese layers
+
+      function showLayer(community){
+        if(mylayer){
+          mylayer.remove();
+        }
+        switch (community) {
+        case 'white':
+            mylayer = L.geoJSON(false, {style:function (feature) {
+            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            break;
+        case 'black':
+            mylayer = L.geoJSON(false, {style:function (feature) {
+            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            break;
+        }
+        mylayer.addTo(mymap);
+       $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
+      }
+
+      showLayer('white');
+
+
     </script>
   </body>
 </html>
