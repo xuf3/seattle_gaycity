@@ -16,19 +16,19 @@
     </div>
 
     <p><span class="placename">source</span></p>
-    <p>Total population:</p>
+    <p>Total population: <span id="tp"> N/A</span></p>
     <div class="card-deck counts">
       <div class="card">
-        <div class="card-body county">
+        <div class="card-body">
           <h5 class="card-title">Percent White</h5>
         </div>
-        <p class="card-text"><span class="county-count">N/A</span></p>
+        <p class="card-text"><span  id="pwhite" class="county-count">N/A</span></p>
       </div>
       <div class="card">
         <div class="card-body state">
           <h5 class="card-title">Percent Black</h5>
           <p class="card-text">
-            <span class="state-count">351</span>
+            <span id="pblack" class="state-count">N/A</span>
           </p>
         </div>
       </div>
@@ -38,13 +38,13 @@
         <div class="card-body county">
           <h5 class="card-title">Percent Asian</h5>
         </div>
-        <p class="card-text"><span class="county-count">N/A</span></p>
+        <p class="card-text"><span id="pasian" class="county-count">N/A</span></p>
       </div>
       <div class="card">
         <div class="card-body state">
           <h5 class="card-title">Percent Hispanic Latino</h5>
           <p class="card-text">
-            <span class="state-count">351</span>
+            <span id="phispanic" class="state-count">N/A</span>
           </p>
         </div>
       </div>
@@ -76,6 +76,13 @@
                     x > 3? '#feb24c':
                     x > 1? '#fed976': '#ffffb2';}
 
+      function classificationTP(x){
+                  return x > 10000? '#bd0026':
+                  x > 8000? '#f03b20':
+                  x > 6000? '#fd8d3c':
+                  x > 4000? '#feb24c':
+                  x > 2000? '#fed976': '#ffffb2';}
+
         //this function works when there's a click on the map
         //will highlight the layer that the mouse clicked
         function highlightFeature(e) {
@@ -93,7 +100,12 @@
         function zoomToFeature(e) {
           // mymap.fitBounds(e.target.getBounds());
           L.DomEvent.stopPropagation(e);
-          $("#hint").text("Click here to the global trend.");
+          console.log(e.target.feature.properties.PWNH);
+          $("#tp").text(e.target.feature.properties.TotalPopulation);
+          $("#pwhite").text(e.target.feature.properties.PWNH);
+          $("#pblack").text(e.target.feature.properties.PBNH);
+          $("#pasian").text(e.target.feature.properties.PANH);
+          $("#phispanic").text(e.target.feature.properties.PHNH);
           //displayPlace(e.target.feature.properties.enname)
         }
 
@@ -123,12 +135,24 @@
             mylayer = L.geoJSON(false, {style:function (feature) {
             return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
             break;
+        case 'asian':
+            mylayer = L.geoJSON(false, {style:function (feature) {
+            return {fillColor: classificationCN(feature.properties.PANH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            break;
+        case 'hispanic':
+            mylayer = L.geoJSON(false, {style:function (feature) {
+            return {fillColor: classificationCN(feature.properties.PHNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            break;
+        case 'tp':
+            mylayer = L.geoJSON(false, {style:function (feature) {
+            return {fillColor: classificationTP(feature.properties.TotalPopulation),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            break;
         }
         mylayer.addTo(mymap);
        $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
       }
 
-      showLayer('white');
+      showLayer('tp');
 
 
     </script>
