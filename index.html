@@ -68,13 +68,28 @@
         	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
         }).addTo(mymap);
 
+     mylayer = L.geoJSON(false, {style:function (feature) {
+     return {fillColor: classificationTP(feature.properties.TotalPopulation),
+       weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature}).addTo(mymap);
+    $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
+
+    /*var total = 0;
+    for count in mylayer.feature.properties.TotalPopulation:
+      total += count;*/
+
+    console.log(total);
+
         //set the color for each area
         function classificationCN(x){
-                    return x > 30? '#bd0026':
-                    x > 15? '#f03b20':
-                    x > 5? '#fd8d3c':
-                    x > 3? '#feb24c':
-                    x > 1? '#fed976': '#ffffb2';}
+                    return
+                    x > 70? '#08306b';
+                    x > 60? '#08519c':
+                    x > 50? '#2171b5':
+                    x > 30? '#4292c6':
+                    x > 15? '#6baed6':
+                    x > 5? '#9ecae1':
+                    x > 3? '#c6dbef':
+                    x > 1? '#deebf7': '#f7fbff';}
 
       function classificationTP(x){
                   return x > 10000? '#bd0026':
@@ -100,7 +115,6 @@
         function zoomToFeature(e) {
           // mymap.fitBounds(e.target.getBounds());
           L.DomEvent.stopPropagation(e);
-          console.log(e.target.feature.properties.PWNH);
           $("#tp").text(e.target.feature.properties.TotalPopulation);
           $("#pwhite").text(e.target.feature.properties.PWNH);
           $("#pblack").text(e.target.feature.properties.PBNH);
@@ -129,30 +143,30 @@
         switch (community) {
         case 'white':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
             break;
         case 'black':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
             break;
         case 'asian':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PANH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PANH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
             break;
         case 'hispanic':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PHNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PHNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
             break;
         case 'tp':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationTP(feature.properties.TotalPopulation),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}},onEachFeature:onEachFeature});
+            return {fillColor: classificationTP(feature.properties.TotalPopulation),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
             break;
         }
         mylayer.addTo(mymap);
        $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
       }
 
-      showLayer('tp');
+      showLayer('white');
 
 
     </script>
