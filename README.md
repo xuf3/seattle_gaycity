@@ -1,4 +1,5 @@
 # LGBTQ Community in Seattle
+**Author: Fengyu Xu Date:2020.06**
 
 ## Projection Intro
 LGBTQ is an initialism that stands for lesbian, gay, bisexual, transgender and queer. These groups of people were minorities in the last few centries. In this new era, the society start to accept and understand them. I hope through this web map, it can help the LGBTQ community to find the area that they are more welcomed to join and live at. Besides, it can also let other people to learn about the LGBTQ community.
