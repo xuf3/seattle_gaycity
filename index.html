@@ -3,9 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>LGBTQ community in Seattle</title>
+    <link href="css/c3.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css">
+    <script src="js/c3.min.js"></script>
+    <script src="js/d3.js"></script>
     <script src="js/leaflet.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
     <script src="seattle.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   </head>
@@ -16,7 +21,15 @@
     </div>
 
     <p><span class="placename">source</span></p>
-    <p>Total population: <span id="tp"> N/A</span></p>
+    <p>Choose the community percentage layer:</p>
+    <div class="button">
+      <button type="button" class="btn btn-secondary">None</button>
+      <button type="button" class="btn btn-secondary">White</button>
+      <button type="button" class="btn btn-secondary">Black</button>
+      <button type="button" class="btn btn-secondary">Asian</button>
+      <button type="button" class="btn btn-secondary">Hispanic</button>
+    </div>
+    <p style = "margin-bottom: 50px">Click on an area to find specific information:</p>
     <div class="card-deck counts">
       <div class="card">
         <div class="card-body">
@@ -55,48 +68,90 @@
     <div id="footer">
       FOOTER HERE
     </div>
-
   </div>
+
+  <div id="legend-panel" class="card-deck legend">
+
+    <div class="card">
+      <div style = "background: #fde0dd" class="card-body">
+        <h5 class="card-title" style="color:black">0</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #fcc5c0" class="card-body">
+        <h5 class="card-title" style="color:black">1</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #fa9fb5" class="card-body">
+        <h5 class="card-title" style="color:black">5</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #f768a1" class="card-body">
+        <h5 class="card-title" style="color:black">15</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #dd3497" class="card-body">
+        <h5 class="card-title" style="color:black">30</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #ae017e" class="card-body">
+        <h5 class="card-title" style="color:black">50</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #7a0177" class="card-body">
+        <h5 class="card-title" style="color:black">60</h5>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style = "background: #49006a" class="card-body">
+        <h5 class="card-title" style="color:black">70+</h5>
+      </div>
+    </div>
+  </div>
+
     <div id="map"></div>
     <script type="text/javascript">
       //adding the basemap
       var mylayer;
+      var chart;
       var mymap = L.map('map',
       {zoomControl: false,center:[47.6062,-122.3321],zoom: 10});
       L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-        	maxZoom: 20,
-        	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+        	maxZoom: 20
         }).addTo(mymap);
 
+      var Thunderforest_Pioneer = L.tileLayer('https://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey={apikey}', {
+        	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        	apikey: '<your apikey>',
+        	maxZoom: 22
+        });
+
      mylayer = L.geoJSON(false, {style:function (feature) {
-     return {fillColor: classificationTP(feature.properties.TotalPopulation),
-       weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature}).addTo(mymap);
+     return {fillColor: classificationCN(feature.properties.PANH),
+       weight: 1, opacity: 1, color: 'white', fillOpacity: 0.65}},onEachFeature:onEachFeature});
     $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
-
-    /*var total = 0;
-    for count in mylayer.feature.properties.TotalPopulation:
-      total += count;*/
-
-    console.log(total);
 
         //set the color for each area
         function classificationCN(x){
-                    return
-                    x > 70? '#08306b';
-                    x > 60? '#08519c':
-                    x > 50? '#2171b5':
-                    x > 30? '#4292c6':
-                    x > 15? '#6baed6':
-                    x > 5? '#9ecae1':
-                    x > 3? '#c6dbef':
-                    x > 1? '#deebf7': '#f7fbff';}
-
-      function classificationTP(x){
-                  return x > 10000? '#bd0026':
-                  x > 8000? '#f03b20':
-                  x > 6000? '#fd8d3c':
-                  x > 4000? '#feb24c':
-                  x > 2000? '#fed976': '#ffffb2';}
+                    return x > 70? '#49006a':
+                    x > 60? '#7a0177':
+                    x > 50? '#ae017e':
+                    x > 30? '#dd3497':
+                    x > 15? '#f768a1':
+                    x > 5? '#fa9fb5':
+                    x > 1? '#fcc5c0': '#fde0dd';}
 
         //this function works when there's a click on the map
         //will highlight the layer that the mouse clicked
@@ -141,33 +196,72 @@
           mylayer.remove();
         }
         switch (community) {
-        case 'white':
+        case 'White':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PWNH),weight: 0.5, opacity: 1, color: 'white', fillOpacity: 0.9}},onEachFeature:onEachFeature});
             break;
-        case 'black':
+        case 'Black':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PWNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PBNH),weight: 0.5, opacity: 1, color: 'white', fillOpacity: 0.9}},onEachFeature:onEachFeature});
             break;
-        case 'asian':
+        case 'Asian':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PANH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PANH),weight: 0.5, opacity: 1, color: 'white', fillOpacity: 0.9}},onEachFeature:onEachFeature});
             break;
-        case 'hispanic':
+        case 'Hispanic':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationCN(feature.properties.PHNH),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
+            return {fillColor: classificationCN(feature.properties.PHNH),weight: 0.5, opacity: 1, color: 'white', fillOpacity: 0.9}},onEachFeature:onEachFeature});
             break;
-        case 'tp':
+        case 'None':
             mylayer = L.geoJSON(false, {style:function (feature) {
-            return {fillColor: classificationTP(feature.properties.TotalPopulation),weight: 1, opacity: 1, color: 'white', fillOpacity: 0.35}},onEachFeature:onEachFeature});
+            return {weight: 0.5, opacity: 0.6, color: 'grey', fillOpacity: 0}},onEachFeature:onEachFeature});
             break;
         }
-        mylayer.addTo(mymap);
+       mylayer.addTo(mymap);
        $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e_2549.geojson", function(data){mylayer.addData(data)});
       }
 
-      showLayer('white');
+      $('.btn').on("click", function(e){
+        showLayer(e.target.textContent);
+        console.log(e.target.textContent);
+      });
 
+      //load the pie chart
+     chart = c3.generate({
+      data: {
+        size: {
+          height: 350,
+          width: 460
+        },
+        // iris data from R
+        columns: [
+            ['white'],['black'],['asian'],['hispanic']
+        ],
+        type : 'pie',
+        onclick: function (d, i) { console.log("onclick", d, i); },
+        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+      },
+      bindto: "#county-chart"
+      });
+
+      chart.load({
+          columns: [
+              ["white", 20],
+              ["black",20],
+              ["asian", 20],
+          ]
+      });
+
+
+      setTimeout(function () {
+          chart.unload({
+              ids: 'data1'
+          });
+          chart.unload({
+              ids: 'data2'
+          });
+      }, 2500);
 
     </script>
   </body>
