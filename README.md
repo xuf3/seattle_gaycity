@@ -5,11 +5,13 @@ LGBTQ is an initialism that stands for lesbian, gay, bisexual, transgender and q
 
 Besides, I am trying to explore what's the factor that affect the LGBTQ community. So I added the race distribution to the map to see if I can find any pattern behind.
 
+![image](img/preview.png)
+
 Here are some features I used in this web map:
 
 | Feature | Impelmenting method |
 | ----------- | ----------- |
-| Info panel, legendary, feature highlight | basic html, js, CSS|
+| Info panel, legend, feature highlight | basic html, js, CSS|
 | Basemap,thematic layer | Leaflet library, ajax|
 | Button | Bootstrap library|
 | Pie chart | C3 library|
@@ -81,6 +83,8 @@ This info panel first shows the name of the ptoject then the source of data. The
 
 Then it's five buttons that user can click on to switch the layers. One of those is "none" just in case user want to just look at the LGBTQ facility or find a specific place on map without the disturb of other layers. I use the bootstrap library to set the button function as well as the style.
 
+![image](img/button.png)
+
 I displayed the 4 statistics in two rows so it save some space for the following content. The css style is the key to create this layout. Every data is wrote in a <div>, which is a block element. Every <div> element will be displayed in a separate linem. So I change the display attribute of the <div> with "card" class to flex and adjust flex-flow to adjust the flex-direction and flex-flow.
 
 ```
@@ -92,11 +96,37 @@ I displayed the 4 statistics in two rows so it save some space for the following
 }
 ```
 
-Then it's a pie chart to show the percent of each race in that area. Pie chart can give user a more direct impact of the proportion of each race rather than plain numbers. Here I use the d3 library to generate the diagram.
+![image](img/statistic.png)
+
+Then it's a pie chart to show the percent of each race in that area. Pie chart can give user a more direct impact of the proportion of each race rather than plain numbers. Here I use the c3 library to generate the diagram.
 
 ```
-d3 js
+chart = c3.generate({
+ data: {
+   size: {
+     height: 350,
+     width: 460
+   },
+   // iris data from R
+   columns: [
+     ["white"],
+     ["black"],
+     ["american indian"],
+     ["asian"],
+     ["hawaiian"],
+     ["hispanic"],
+     ["other"]
+   ],
+   type : 'pie',
+   onclick: function (d, i) { console.log("onclick", d, i); },
+   onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+   onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+ },
+ bindto: "#county-chart"
+ });
 ```
+
+![image](img/pie-chart.png)
 
 All these statistics will be shown when there's a mouse click on the area.
 
@@ -111,9 +141,9 @@ Finally, it's the footer to include a brief description of this project and the 
 
 I set the opacity of the thematic layer to 0.35. since I cannot get the name for each area. It's import to show people the map view of the street so they can find the area they are interested in and click on it to learn more.
 
-I designed one color scale that applied to all four layers. Since the data range is large, from 0 to 80, so I set 9 colors, found from [online colorbrewer](https://colorbrewer2.org/#type=sequential&scheme=Blues&n=9), in total  to present each data range. A lengendary is displayed at the lower right corner to show the specific color range.
+I designed one color scale that applied to all four layers. Since the data range is large, from 0 to 80, so I set 9 colors, found from [online colorbrewer](https://colorbrewer2.org/#type=sequential&scheme=Blues&n=9), in total  to present each data range. A lengendis displayed at the lower right corner to show the specific color range.
 
-[picture example]
+![image](img/legend.png)
 
 
 ## Reflection
@@ -124,24 +154,8 @@ So far, this map's thematic layer is for kingcounty but the LGBTQ community is o
 
 **Color scale**
 
-For the different race's layer, I use the same color scale to set the color for each area. However, since the data for each race are very different and has large gap, this color scale is not the best way to visualize the data. I am thinking maybe to create separate color scale for each layer. But then the legendary also need to be redeisgned.
+For the different race's layer, I use the same color scale to set the color for each area. However, since the data for each race are very different and has large gap, this color scale is not the best way to visualize the data. I am thinking maybe to create separate color scale for each layer. But then the legend also need to be redeisgned.
 
 **Area name**
 
 In the info panel I was not able to include the name of each area since it's not included in the dataset I am using. But there's an field in the dataset that the website indicate that it can be used to join other dataset. If I can find a related dataset with area name in the future. I would like to add the name of the area to the info panel so user will know clearly which area they are looking at.
-
-
-## describe the systematic architecture
-- client, server, services, and data.
-inspect the code of this project, especially look into the following issues.
-- What are the data flowed in between the client and server.
-- The major libaries in use and their functions.
-- Does this project support responsive design?
-
-
-
-##describe the basemap, the thematic layer and the interactive features if it has.
-
-## list any web map element in use (e.g, scalar bar, north arrow, legend, etc.) if it has.
-
-##analyze he strengths and weakness of the examined project.

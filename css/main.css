@@ -192,7 +192,7 @@ div#footer>div {
   bottom: 1%;
   left: .5%;
   z-index: 1000;
-  background: #343a40;
+  background: #52435d;
   color: white;
   opacity: 1;
   padding: 40px 15px 20px 15px;
@@ -200,7 +200,7 @@ div#footer>div {
 
 .card-deck .card {
   top: -40px;
-  background: #343a40;
+  background: #52435d;
   padding: 2px;
   margin-right: 0px;
   margin-left: 0px;
@@ -208,7 +208,7 @@ div#footer>div {
   flex: 1 0 0%;
   flex-direction: column;
   border-style: solid;
-  border-color: black;
+  border-color: grey;
   border-radius: 2px;
   border-width: 0.1px;
 }
@@ -267,6 +267,7 @@ div#footer>div {
 .card-text {
   font-size: 40px;
   text-align: center;
+  color:grey;
 }
 
 #info h4 i {
@@ -591,4 +592,10 @@ text {
 
 .button {
   margin-bottom: 10px;
+}
+
+.currentLayer{
+  margin-top: -30px;
+  color: grey;
+  font-size: 11px;
 }

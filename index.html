@@ -19,8 +19,6 @@
     <div id="title">
       LGBTQ Community Map (2009)
     </div>
-
-    <p><span class="placename">source</span></p>
     <p>Choose the community percentage layer:</p>
     <div class="button">
       <button type="button" class="btn btn-secondary">None</button>
@@ -63,6 +61,7 @@
       </div>
     </div>
 
+    <p class = "currentLayer">Current Layer: <span id = "curLayer">None</span>community</p>
     <div id="county-chart"></div>
 
     <div id="footer">
@@ -176,6 +175,17 @@
           $("#pasian").text(e.target.feature.properties.PANH);
           $("#phispanic").text(e.target.feature.properties.PHNH);
           //displayPlace(e.target.feature.properties.enname)
+          chart.load({
+              columns: [
+                  ["white", e.target.feature.properties.PWNH],
+                  ["black",e.target.feature.properties.PBNH],
+                  ["american indian", e.target.feature.properties.PAINH],
+                  ["asian", e.target.feature.properties.PANH],
+                  ["hawaiian", e.target.feature.properties.PHNH],
+                  ["hispanic", e.target.feature.properties.PHL],
+                  ["other", e.target.feature.properties.P2NH]
+              ]
+          });
         }
 
         // 3.2.3 reset the hightlighted feature when the mouse is out of its region.
@@ -223,7 +233,7 @@
 
       $('.btn').on("click", function(e){
         showLayer(e.target.textContent);
-        console.log(e.target.textContent);
+        $("#curLayer").text(e.target.textContent);
       });
 
       //load the pie chart
@@ -235,7 +245,13 @@
         },
         // iris data from R
         columns: [
-            ['white'],['black'],['asian'],['hispanic']
+          ["white"],
+          ["black"],
+          ["american indian"],
+          ["asian"],
+          ["hawaiian"],
+          ["hispanic"],
+          ["other"]
         ],
         type : 'pie',
         onclick: function (d, i) { console.log("onclick", d, i); },
@@ -243,14 +259,6 @@
         onmouseout: function (d, i) { console.log("onmouseout", d, i); }
       },
       bindto: "#county-chart"
-      });
-
-      chart.load({
-          columns: [
-              ["white", 20],
-              ["black",20],
-              ["asian", 20],
-          ]
       });
 
 
