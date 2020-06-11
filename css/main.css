@@ -117,10 +117,6 @@ div#footer>div {
   font-family: 'Titillium Web', sans-serif;
 }
 
-.leaflet-marker-icon {
-  visibility: hidden;
-  /* width:20px!important */
-}
 
 #demo {
   font-size: 14px

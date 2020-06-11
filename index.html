@@ -10,7 +10,6 @@
     <script src="js/d3.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
     <script src="seattle.js"></script>
-    <script src="js/chroma.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/>
@@ -281,7 +280,8 @@
       ]).then(function(datasets) {
         datasets[0].forEach(function(d) {
           if(d.name != ""){
-            L.marker([d.latitude, d.longitute]).bindPopup("hello").addTo(mymap);
+            L.marker([d.latitude, d.longitute]).bindPopup("<b>Name:" + d.name + "</b>"
+          + "<p>Address:" + d.address + "</P>" + + "<p>Rate:" + d.rating + "</P>").addTo(mymap);
           }
         })
       });
