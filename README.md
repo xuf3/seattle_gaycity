@@ -1,7 +1,7 @@
 # LGBTQ Community in Seattle
 **Author: Fengyu Xu Date:2020.06**
 
-_Some of the feature are not implemented yet, but I will update it in the following week._ 
+_Some of the feature are not implemented yet, but I will update it in the following week._
 
 ## Projection Intro
 LGBTQ is an initialism that stands for lesbian, gay, bisexual, transgender and queer. These groups of people were minorities in the last few centries. In this new era, the society start to accept and understand them. I hope through this web map, it can help the LGBTQ community to find the area that they are more welcomed to join and live at. Besides, it can also let other people to learn about the LGBTQ community.
@@ -77,6 +77,8 @@ $.getJSON("https://opendata.arcgis.com/datasets/b4cf82cdfa2b437eb51ccbfe980aa39e
 ```
 
 **LEGBTQ facilities data**
+
+This data is comming from the app gaycity. It contains the address, name, rate, reviews of each facility. In order to present the point on the map, I conver the origin json file to csv and add a latitude and logitude column. Then I did geocoding manually. I am looking for an easier way to convert all the data together. 
 
 ## Visual element
 

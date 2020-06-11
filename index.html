@@ -280,8 +280,8 @@
       ]).then(function(datasets) {
         datasets[0].forEach(function(d) {
           if(d.name != ""){
-            L.marker([d.latitude, d.longitute]).bindPopup("<b>Name:" + d.name + "</b>"
-          + "<p>Address:" + d.address + "</P>" + + "<p>Rate:" + d.rating + "</P>").addTo(mymap);
+            L.marker([d.latitude, d.longitute]).bindPopup("<b>Name:  " + d.name + "</b>"
+          + "<p>Address:  " + d.address + "</p>" + "<p>Rate:  " + d.rating + "</p>").addTo(mymap);
           }
         })
       });
